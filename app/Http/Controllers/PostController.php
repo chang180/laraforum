@@ -40,7 +40,11 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        $post->load('user');
+
+        return inertia('Post/Show', [
+            'post' => new PostResource($post),
+        ]);
     }
 
     /**
@@ -48,7 +52,6 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
     }
 
     /**
