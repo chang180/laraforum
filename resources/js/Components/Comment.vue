@@ -13,7 +13,7 @@
                 >By {{ comment.user.name }}
                 {{ relativeDate(comment.created_at) }} ago</span
             >
-            <div class="mt-1" v-if="canDelete">
+            <div class="mt-1" v-if="comment.can?.delete">
                 <form @submit.prevent="deleteComment">
                     <button>Delete</button>
                 </form>

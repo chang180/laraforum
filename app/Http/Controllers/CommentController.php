@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Post;
+use Illuminate\Auth\Middleware\Authorize;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -67,12 +70,9 @@ class CommentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request,Comment $comment)
+    public function destroy(Request $request,Comment $comment): RedirectResponse
     {
-
-        if ($request->user()->id !== $comment->user_id) {
-            abort(403);
-        }
+        Auth::user()->can('delete', $comment) ?: abort(403);
 
         $comment->delete();
 
