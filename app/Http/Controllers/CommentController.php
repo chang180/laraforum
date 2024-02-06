@@ -72,10 +72,11 @@ class CommentController extends Controller
      */
     public function destroy(Request $request,Comment $comment): RedirectResponse
     {
+
         Auth::user()->can('delete', $comment) ?: abort(403);
 
         $comment->delete();
 
-        return to_route('posts.show', $comment->post_id);
+        return to_route('posts.show', ['post' => $comment->post_id, 'page' => $request->query('page')]);
     }
 }
