@@ -13,9 +13,23 @@
                 >By {{ comment.user.name }}
                 {{ relativeDate(comment.created_at) }} ago</span
             >
-            <div class="mt-2 text-right empty:hidden" v-if="comment.can?.delete">
+            <div
+                class="flex justify-end mt-2 space-x-3 empty:hidden"
+                v-if="comment.can?.update"
+            >
+                <form @submit.prevent="$emit('edit', comment.id)">
+                    <button
+                        class="font-mono text-xs text-blue-700 hover:font-semibold"
+                    >
+                        Edit
+                    </button>
+                </form>
                 <form @submit.prevent="$emit('delete', comment.id)">
-                    <button class="font-mono text-xs text-red-700 hover:font-semibold">Delete</button>
+                    <button
+                        class="font-mono text-xs text-red-700 hover:font-semibold"
+                    >
+                        Delete
+                    </button>
                 </form>
             </div>
         </div>
@@ -24,11 +38,9 @@
 
 <script setup>
 import { relativeDate } from "@/Utilities/date.js";
-import { router, usePage } from "@inertiajs/vue3";
 import { defineProps, computed } from "vue";
 
 const props = defineProps(["comment"]);
 
-const emit = defineEmits(["delete"]);
-
+const emit = defineEmits(["delete", "edit"]);
 </script>
