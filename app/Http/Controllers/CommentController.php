@@ -49,7 +49,6 @@ class CommentController extends Controller
      */
     public function destroy(Request $request,Comment $comment): RedirectResponse
     {
-
         Auth::user()->can('delete', $comment) ?: abort(403);
 
         $comment->delete();

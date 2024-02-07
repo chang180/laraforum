@@ -24,7 +24,7 @@
                         Edit
                     </button>
                 </form>
-                <form @submit.prevent="$emit('delete', comment.id)">
+                <form @submit.prevent="$emit('delete', comment.id)" v-if="comment.can?.delete">
                     <button
                         class="font-mono text-xs text-red-700 hover:font-semibold"
                     >
