@@ -1,5 +1,5 @@
 <template>
-    <AppLayout>
+    <AppLayout :title="post.title">
         <Container>
             <h1 class="text-2xl font-bold">{{ post.title }}</h1>
             <span class="block text-sm text-gray-600">{{ formattedDate }} ago by {{ post.user.name }}</span>
