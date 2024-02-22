@@ -9,7 +9,7 @@ use function Pest\Laravel\post;
 beforeEach(function () {
     $this->validData = [
         'title' => 'My first post',
-        'body' => 'This is the content of my first post',
+        'body' => str_repeat('a', 101),
     ];
 });
 

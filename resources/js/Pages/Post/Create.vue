@@ -5,7 +5,7 @@
             <form @submit.prevent="createPost" class="mt-6">
                 <div>
                     <InputLabel for="title" class="sr-only">Title</InputLabel>
-                    <TextInput v-model="form.title" id="title" type="text" class="w-full" placeholder="Give it a greate title..." />
+                    <TextInput v-model="form.title" id="title" type="text" class="w-full" placeholder="Give it a great title..." />
                     <InputError :message="form.errors.title" class="mt-2" />
                 </div>
                 <div class="my-3">
