@@ -3,7 +3,7 @@
         <Container>
             <ul class="devide-y">
                 <li v-for="post in posts.data" :key="post.id" class="">
-                    <Link :href="route('posts.show', post.id)" class="block px-2 py-4 group">
+                    <Link :href="post.routes.show" class="block px-2 py-4 group">
                         <span class="text-lg font-bold group-hover:text-indigo-500">{{ post.title }}</span>
                         <span class="block text-sm text-gray-600">{{ formattedDate(post) }} ago by {{ post.user.name }}</span>
                     </Link>
