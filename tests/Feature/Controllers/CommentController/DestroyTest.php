@@ -27,7 +27,7 @@ it('redirects to the post show page', function () {
 
     actingAs($comment->user)
         ->delete(route('comments.destroy', $comment))
-        ->assertRedirect(route('posts.show', $comment->post_id));
+        ->assertRedirect($comment->post->showRoute());
 });
 
 it('prevent deleting a comment from another user', function () {
@@ -56,6 +56,6 @@ it('redirects to the post show page with the page query parameter', function () 
 
     actingAs($comment->user)
         ->delete(route('comments.destroy', ['comment' => $comment, 'page' => 2]))
-        ->assertRedirect(route('posts.show', ['post' => $comment->post_id, 'page' => 2]));
+        ->assertRedirect($comment->post->showRoute(['page' => 2]));
 });
 

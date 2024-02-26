@@ -35,7 +35,7 @@ it('redirects to the post show page after storing a comment', function () {
         ->post(route('posts.comments.store', $post), [
             'body' => 'This is a comment'
         ])
-        ->assertRedirect(route('posts.show', $post));
+        ->assertRedirect($post->showRoute());
 });
 
 it('requires a valid body', function ($value) {
