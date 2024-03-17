@@ -3,9 +3,9 @@
 namespace Database\Factories;
 
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
+
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Collection as SupportCollection;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\File;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -34,7 +34,7 @@ class PostFactory extends Factory
     {
         $posts = $this->getFixtures()
             ->map(fn (string $contents) => str($contents)->explode("\n", 2))
-            ->map(fn (SupportCollection $parts) => [
+            ->map(fn (Collection $parts) => [
                 'title' => str($parts[0])->trim()->after('# '),
                 'body' => str($parts[1])->trim(),
             ]);

@@ -15,6 +15,15 @@ class Post extends Model
 {
     use HasFactory;
 
+    protected static function booted()
+    {
+        static::saving(fn ($post) => $post->fill([
+            // 'slug' => Str::slug($post->title),
+            'html' => str($post->body)->markdown(),
+        ]));
+
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -29,6 +38,7 @@ class Post extends Model
     {
         return Attribute::set(fn ($value) => Str::title($value));
     }
+
 
     public function showRoute(array $parameters = []): string
     {
