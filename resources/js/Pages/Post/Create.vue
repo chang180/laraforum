@@ -16,7 +16,30 @@
                 </div>
                 <div class="my-3">
                     <InputLabel for="body" class="sr-only">Body</InputLabel>
-                    <MarkdownEditor v-model="form.body" />
+                    <MarkdownEditor v-model="form.body">
+                        <template #toolbar="{ editor }">
+                            <button
+                                type="button"
+                                class="px-3 py-2"
+                                title="Heading 3"
+                                @click="
+                                    () =>
+                                        editor
+                                            .chain()
+                                            .focus()
+                                            .toggleHeading({ level: 4 })
+                                            .run()
+                                "
+                                :class="[
+                                    editor.isActive('heading', { level: 4 })
+                                        ? 'bg-indigo-500 text-white'
+                                        : 'hover:bg-gray-200',
+                                ]"
+                            >
+                                <i class="ri-h-3"></i>
+                            </button>
+                        </template>
+                    </MarkdownEditor>
                     <InputError :message="form.errors.body" class="mt-2" />
                 </div>
                 <div>
