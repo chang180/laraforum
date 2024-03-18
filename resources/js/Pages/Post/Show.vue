@@ -21,12 +21,12 @@
                         <InputLabel for="body" class="sr-only"
                             >Comment</InputLabel
                         >
-                        <TextareaInput
+                        <MarkdownEditor
                             ref="commentTextareaRef"
                             v-model="commentForm.body"
                             id="body"
-                            rows="4"
                             placeholder="Put in some words..."
+                            editorClass="min-h-[160px]"
                         />
                         <InputError
                             :message="commentForm.errors.body"
@@ -78,12 +78,12 @@ import { useForm, router } from "@inertiajs/vue3";
 import Container from "@/Components/Container.vue";
 import Pagination from "@/Components/Pagination.vue";
 import Comment from "@/Components/Comment.vue";
-import TextareaInput from "@/Components/TextareaInput.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import InputError from "@/Components/InputError.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import { useConfirm } from "@/Utilities/Composables/useComfirm";
+import MarkdownEditor from "@/Components/MarkdownEditor.vue";
 
 const props = defineProps(["post", "comments"]);
 

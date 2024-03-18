@@ -17,13 +17,6 @@
                 <div class="my-3">
                     <InputLabel for="body" class="sr-only">Body</InputLabel>
                     <MarkdownEditor v-model="form.body" />
-                    <TextareaInput
-                        v-model="form.body"
-                        id="body"
-                        rows="25"
-                        class="mt2"
-                        placeholder="Put in some words..."
-                    />
                     <InputError :message="form.errors.body" class="mt-2" />
                 </div>
                 <div>
@@ -46,7 +39,6 @@ import InputLabel from "@/Components/InputLabel.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
-import TextareaInput from "@/Components/TextareaInput.vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import { useForm } from "@inertiajs/vue3";
 
