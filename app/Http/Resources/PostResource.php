@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Topic;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -17,6 +18,7 @@ class PostResource extends JsonResource
         return [
             'id' => $this->id,
             'user' => $this->whenLoaded('user', fn () => UserResource::make($this->user)),
+            'topic' => $this->whenLoaded('topic', fn () => TopicResource::make($this->topic)),
             'title' => $this->title,
             'body' => $this->body,
             'html' => $this->html,

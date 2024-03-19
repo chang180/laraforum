@@ -6,6 +6,7 @@ use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Support\Facades\Route;
 
 return Application::configure(basePath: dirname(__DIR__))
+    ->withProviders()
     ->withRouting(
         web: __DIR__ . '/../routes/web.php',
         api: __DIR__ . '/../routes/api.php',
@@ -13,8 +14,12 @@ return Application::configure(basePath: dirname(__DIR__))
         // channels: __DIR__.'/../routes/channels.php',
         health: '/up',
         then: function () {
-            Route::prefix('local')
-                ->group(base_path('routes/local.php'));
+            // if the environment is local, load the local routes
+            if (app()->environment('local')) {
+                Route::prefix('local')
+                    ->namespace('App\Support')
+                    ->group(base_path('routes/local.php'));
+            }
         }
     )
     ->withMiddleware(function (Middleware $middleware) {

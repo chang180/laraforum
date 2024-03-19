@@ -63,7 +63,7 @@ const createPost = () => form.post(route("posts.store"));
 
 const autofill = async () => {
     const response = await axios.get("/local/post-content");
-
-    console.log(response);
+    form.title = response.data.title;
+    form.body = response.data.body;
 };
 </script>
