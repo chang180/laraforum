@@ -7,6 +7,9 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Resources\PostResource;
 use App\Http\Resources\CommentResource;
+use App\Http\Resources\TopicResource;
+use App\Models\Topic;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class PostController extends Controller
 {
@@ -19,11 +22,17 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Topic $topic = null)
     {
-        // return PostResource::collection(Post::paginate());
+        $posts = Post::with(['user', 'topic'])
+        ->when($topic, fn (Builder $query) => $query->whereBelongsTo($topic))
+        ->latest()
+        ->latest('id')
+        ->paginate();
+
         return inertia('Post/Index', [
-            'posts' => PostResource::collection(Post::with(['user', 'topic'])->latest()->latest('id')->paginate()),
+            'posts' => PostResource::collection($posts),
+            'selectedTopic' => fn () => $topic ? new TopicResource($topic) : null,
         ]);
     }
 
