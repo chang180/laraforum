@@ -2,18 +2,24 @@
     <AppLayout>
         <Container>
             <div>
-                <Link :href="route('posts.index')" v-if="selectedTopic">
-                    <span
-                        class="block mb-2 text-sm text-indigo-500 hover:text-indigo-700"
-                        >← Back to all posts</span
-                    >
-                </Link>
                 <PageHeading
                     v-text="selectedTopic ? selectedTopic.name : 'All Posts'"
                 />
                 <p v-if="selectedTopic" class="mt-2 text-sm text-gray-600">
                     {{ selectedTopic.description }}
                 </p>
+                <menu class="flex pt-1 pb-2 mt-3 space-x-1 overflow-x-auto">
+                    <li>
+                        <Pill :href="route('posts.index')" :filled="!selectedTopic">All Posts</Pill>
+                    </li>
+                    <li v-for="topic in topics" :key="topic.id">
+                        <Pill :href="route('posts.index', { topic: topic.slug })"
+                        :filled="topic.slug === selectedTopic?.slug"
+                        >
+                            {{ topic.name }}
+                        </Pill>
+                    </li>
+                </menu>
             </div>
             <ul class="mt-4 devide-y">
                 <li
@@ -34,12 +40,9 @@
                             {{ post.user.name }}</span
                         >
                     </Link>
-                    <Link
-                        :href="route('posts.index', { topic: post.topic.slug })"
-                        class="rounded-full py-0.5 px-2 border border-pink-500 text-pink-500 hover:bg-indigo-500 hover:text-indigo-50 mb-2"
-                    >
+                    <Pill :href="route('posts.index', { topic: post.topic.slug })">
                         {{ post.topic.name }}
-                    </Link>
+                    </Pill>
                 </li>
             </ul>
         </Container>
@@ -54,8 +57,9 @@ import { Link } from "@inertiajs/vue3";
 import { formatDistance, parseISO } from "date-fns";
 import { relativeDate } from "@/Utilities/date.js";
 import PageHeading from "@/Components/pageHeading.vue";
+import Pill from "@/Components/Pill.vue";
 
-defineProps(["posts", "selectedTopic"]);
+defineProps(["posts", "topics", "selectedTopic"]);
 
 const formattedDate = (post) => relativeDate(post.created_at);
 </script>
