@@ -7,7 +7,7 @@ variables:
   MYSQL_DATABASE: u625132372_laraforum_test
   MYSQL_ROOT_PASSWORD: secret
   DB_CONNECTION: mysql
-  DB_HOST: srv1417.hstgr.io  # 或使用 153.92.15.26
+  DB_HOST: srv1417.hstgr.io
   DB_PORT: 3306
   DB_DATABASE: u625132372_laraforum_test
   DB_USERNAME: u625132372_laraforum_test
@@ -32,20 +32,8 @@ before_script:
   - docker-php-ext-install pdo_mysql zip
   - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
   - npm install -g dotenv-cli
-  - echo "APP_ENV=testing" >> .env
-  - echo "DB_CONNECTION=$DB_CONNECTION" >> .env
-  - echo "DB_HOST=$DB_HOST" >> .env
-  - echo "DB_PORT=$DB_PORT" >> .env
-  - echo "DB_DATABASE=$DB_DATABASE" >> .env
-  - echo "DB_USERNAME=$DB_USERNAME" >> .env
-  - echo "DB_PASSWORD=$DB_PASSWORD" >> .env
-  - echo "MAIL_HOST=$MAIL_HOST" >> .env
-  - echo "MAIL_PORT=$MAIL_PORT" >> .env
-  - echo "MAIL_USERNAME=$MAIL_USERNAME" >> .env
-  - echo "MAIL_PASSWORD=$MAIL_PASSWORD" >> .env
-  - echo "MAIL_ENCRYPTION=$MAIL_ENCRYPTION" >> .env
+  - cp .env.test .env
   - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
-  - cp .env.example .env
   - php artisan key:generate
   - php artisan migrate --env=testing
 
@@ -57,6 +45,7 @@ build:
 test:
   stage: test
   script:
+    - php artisan migrate --env=testing
     - php artisan test --env=testing
 
 deploy:
