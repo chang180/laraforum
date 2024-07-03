@@ -51,4 +51,4 @@ deploy:
     - master
   environment:
     name: production
-    url: http://laraforum.chang180backend.com
+    url: https://laraforum.chang180backend.com
