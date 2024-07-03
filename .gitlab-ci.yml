@@ -1,13 +1,22 @@
 image: php:8.2
 
+services:
+  - mysql:latest
+
+variables:
+  MYSQL_DATABASE: laraforum_test
+  MYSQL_ROOT_PASSWORD: secret
+  DB_CONNECTION: mysql
+  DB_HOST: mysql
+  DB_PORT: 3306
+  DB_DATABASE: laraforum_test
+  DB_USERNAME: root
+  DB_PASSWORD: secret
+
 stages:
   - build
   - test
   - deploy
-
-variables:
-  APP_ENV: production
-  DB_CONNECTION: mysql
 
 cache:
   paths:
@@ -18,6 +27,8 @@ before_script:
   - apt-get install -y nodejs npm
   - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
   - npm install -g dotenv-cli
+  - echo "APP_ENV=$APP_ENV" >> .env
+  - echo "DB_CONNECTION=$DB_CONNECTION" >> .env
   - echo "DB_HOST=$DB_HOST" >> .env
   - echo "DB_PORT=$DB_PORT" >> .env
   - echo "DB_DATABASE=$DB_DATABASE" >> .env
@@ -28,9 +39,10 @@ before_script:
   - echo "MAIL_USERNAME=$MAIL_USERNAME" >> .env
   - echo "MAIL_PASSWORD=$MAIL_PASSWORD" >> .env
   - echo "MAIL_ENCRYPTION=$MAIL_ENCRYPTION" >> .env
-  - dotenv -e .env -- composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
-  - dotenv -e .env -- cp .env.example .env
-  - dotenv -e .env -- php artisan key:generate
+  - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
+  - cp .env.example .env
+  - php artisan key:generate
+  - php artisan migrate --env=testing
 
 build:
   stage: build
@@ -40,8 +52,7 @@ build:
 test:
   stage: test
   script:
-    - echo "Running tests..."
-    - dotenv -e .env -- php artisan test
+    - php artisan test --env=testing
 
 deploy:
   stage: deploy
