@@ -1,0 +1,50 @@
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  APP_ENV: production
+  DB_CONNECTION: mysql
+
+cache:
+  paths:
+    - vendor/
+
+before_script:
+  - npm install -g dotenv-cli
+  - echo "DB_HOST=$DB_HOST" >> .env
+  - echo "DB_PORT=$DB_PORT" >> .env
+  - echo "DB_DATABASE=$DB_DATABASE" >> .env
+  - echo "DB_USERNAME=$DB_USERNAME" >> .env
+  - echo "DB_PASSWORD=$DB_PASSWORD" >> .env
+  - echo "MAIL_HOST=$MAIL_HOST" >> .env
+  - echo "MAIL_PORT=$MAIL_PORT" >> .env
+  - echo "MAIL_USERNAME=$MAIL_USERNAME" >> .env
+  - echo "MAIL_PASSWORD=$MAIL_PASSWORD" >> .env
+  - echo "MAIL_ENCRYPTION=$MAIL_ENCRYPTION" >> .env
+  - dotenv -e .env -- composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
+  - dotenv -e .env -- cp .env.example .env
+  - dotenv -e .env -- php artisan key:generate
+
+build:
+  stage: build
+  script:
+    - echo "Building the application..."
+
+test:
+  stage: test
+  script:
+    - echo "Running tests..."
+    - dotenv -e .env -- php artisan test
+
+deploy:
+  stage: deploy
+  script:
+    - echo "Deploying application..."
+    - rsync -avz --delete-after ./ hostinger_user@hostinger_server:/path/to/project/
+  only:
+    - master
+  environment:
+    name: production
+    url: http://your-production-url.com
