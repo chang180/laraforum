@@ -16,6 +16,7 @@ cache:
 before_script:
   - apt-get update -y
   - apt-get install -y nodejs npm
+  - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
   - npm install -g dotenv-cli
   - echo "DB_HOST=$DB_HOST" >> .env
   - echo "DB_PORT=$DB_PORT" >> .env
