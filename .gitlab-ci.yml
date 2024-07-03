@@ -14,6 +14,8 @@ cache:
     - vendor/
 
 before_script:
+  - apt-get update -y
+  - apt-get install -y nodejs npm
   - npm install -g dotenv-cli
   - echo "DB_HOST=$DB_HOST" >> .env
   - echo "DB_PORT=$DB_PORT" >> .env
@@ -43,7 +45,7 @@ test:
 deploy:
   stage: deploy
   script:
-    - echo "Deploying application...."
+    - echo "Deploying application..."
     - apt-get update -y
     - apt-get install -y sshpass
     - sshpass -p $SSH_PASSWORD ssh -p $SSH_PORT -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "cd /public_html/laraforum && git pull origin main && composer install && php artisan migrate --force && php artisan config:cache && php artisan route:cache && php artisan view:cache"
@@ -51,4 +53,4 @@ deploy:
     - master
   environment:
     name: production
-    url: https://laraforum.chang180backend.com
+    url: http://laraforum.chang180backend.com
