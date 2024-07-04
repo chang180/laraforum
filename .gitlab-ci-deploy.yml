@@ -5,7 +5,7 @@ variables:
   SSH_PORT: $SSH_PORT
   SSH_USER: $SSH_USER
   SSH_HOST: $SSH_HOST
-  GIT_REPO_URL: https://glpat-nxPSzZPxH7kQpwEoiCys@github.com/chang180/laraforum.git
+  GIT_REPO_URL: https://glpat-nxPSzZPxH7kQpwEoiCys@gitlab.com/chang180/laraforum.git
 
 stages:
   - deploy
@@ -14,20 +14,13 @@ deploy:
   stage: deploy
   script:
     - echo "Deploying application..."
-    - apt-get update -y
-    - apt-get install -y sshpass
     - sshpass -p $SSH_PASSWORD ssh -p $SSH_PORT -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "
-      mkdir -p ~/public_html/laraforum &&
       cd ~/public_html/laraforum &&
-      if [ ! -d .git ]; then git init && git remote add origin $GIT_REPO_URL; fi &&
+      if [ ! -d .git ]; then
+        git init && git remote add origin $GIT_REPO_URL;
+      fi &&
       git pull origin main &&
-      apt-get update -y &&
-      apt-get install -y nodejs npm libpng-dev libjpeg-dev libfreetype6-dev zip libzip-dev &&
-      docker-php-ext-configure gd --with-freetype --with-jpeg &&
-      docker-php-ext-install gd pdo_mysql zip &&
       curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer &&
-      npm install -g dotenv-cli &&
-      cp .env.test .env &&
       composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader &&
       php artisan key:generate &&
       php artisan migrate:fresh --env=testing &&
