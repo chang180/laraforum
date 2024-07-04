@@ -6,6 +6,10 @@ variables:
   SSH_USER: $SSH_USER
   SSH_HOST: $SSH_HOST
   GIT_REPO_URL: https://glpat-nxPSzZPxH7kQpwEoiCys@gitlab.com/chang180/laraforum.git
+  FTP_HOST: $FTP_HOST
+  FTP_USER: $FTP_USER
+  FTP_PASSWORD: $FTP_PASSWORD
+  REMOTE_DIR: /home/u625132372/domains/chang180backend.com/public_html/laraforum
 
 stages:
   - deploy
@@ -14,13 +18,10 @@ deploy:
   stage: deploy
   script:
     - echo "Deploying application..."
-    - apt-get update -y && apt-get install -y sshpass
+    - apt-get update -y && apt-get install -y lftp sshpass
+    - lftp -c "open -u $FTP_USER,$FTP_PASSWORD $FTP_HOST; mirror -R ./ $REMOTE_DIR"
     - sshpass -p $SSH_PASSWORD ssh -p $SSH_PORT -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "
-      cd ~/public_html/laraforum &&
-      if [ ! -d .git ]; then
-        git init && git remote add origin $GIT_REPO_URL;
-      fi &&
-      git pull origin main &&
+      cd $REMOTE_DIR &&
       curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer &&
       composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader &&
       php artisan key:generate &&
