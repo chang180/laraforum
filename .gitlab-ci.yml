@@ -11,7 +11,7 @@ deploy:
   stage: deploy
   script:
     - echo "Deploying application..."
-    - sshpass -p $SSH_PASSWORD ssh -p $SSH_PORT -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "cd $REMOTE_DIR && if [ ! -d .git ]; then git clone $GIT_REPO_URL .; else git pull origin main; fi && php composer.phar install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader && npm install && php artisan key:generate && php artisan migrate:fresh --env=testing && php artisan migrate --force && php artisan config:cache && php artisan route:cache && php artisan view:cache"
+    - sshpass -p $SSH_PASSWORD ssh -p $SSH_PORT -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "cd $REMOTE_DIR && if [ ! -d .git ]; then git clone $GIT_REPO_URL .; else git pull origin main; fi && composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader && npm install && php artisan key:generate && php artisan migrate:fresh --env=testing && php artisan migrate --force && php artisan config:cache && php artisan route:cache && php artisan view:cache"
   only:
     - main
   environment:
