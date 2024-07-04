@@ -35,7 +35,7 @@ before_script:
   - cp .env.test .env
   - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
   - php artisan key:generate
-  - php artisan migrate:fresh --seed --env=testing
+  - php artisan migrate:fresh --env=testing
 
 build:
   stage: build
@@ -45,7 +45,7 @@ build:
 test:
   stage: test
   script:
-    - php artisan migrate:fresh --seed --env=testing
+    - php artisan migrate:fresh --env=testing
     - php artisan test --env=testing
 
 deploy:
