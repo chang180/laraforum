@@ -19,6 +19,8 @@ deploy:
           git clone $GIT_REPO_URL .;
         else
           git fetch origin main &&
+          git add . &&
+          git commit -m 'Temporary commit for rebase' || echo 'No changes to commit' &&
           git rebase origin/main;
         fi &&
         composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader &&
