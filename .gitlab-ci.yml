@@ -16,7 +16,7 @@ deploy:
     - echo "Deploying application..."
     - apt-get update -y && apt-get install -y sshpass
     - sshpass -p $SSH_PASSWORD ssh -p $SSH_PORT -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "
-      mkdir -p ~/public_html/laraforum && cd ~/public_html/laraforum &&
+      cd ~/public_html/laraforum &&
       if [ ! -d .git ]; then
         git init && git remote add origin $GIT_REPO_URL;
       fi &&
