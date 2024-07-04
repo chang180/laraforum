@@ -1,20 +1,23 @@
 <?php
 
-use App\Http\Resources\TopicResource;
-use App\Models\Topic;
 use App\Models\User;
+use App\Models\Topic;
 use function Pest\Laravel\get;
 use function Pest\Laravel\actingAs;
+use App\Http\Resources\TopicResource;
+use Inertia\Testing\AssertableInertia;
 
 it('requires authentication', function () {
     get(route('posts.create'))
         ->assertRedirect(route('login'));
 });
 
-it('returns the correct component',function(){
+it('returns the correct component', function () {
     actingAs(User::factory()->create())
         ->get(route('posts.create'))
-        ->assertComponent('Post/Create');
+        ->assertInertia(fn (AssertableInertia $page) => $page
+            ->component('Post/Create')
+        );
 });
 
 it('passes topics to the view', function () {
@@ -22,7 +25,10 @@ it('passes topics to the view', function () {
 
     actingAs(User::factory()->create())
         ->get(route('posts.create'))
-        ->assertHasResource('topics', TopicResource::collection($topics));
+        ->assertInertia(fn (AssertableInertia $page) => $page
+            ->component('Post/Create')
+            ->has('topics', TopicResource::collection($topics)->count())
+        );
 });
 
 

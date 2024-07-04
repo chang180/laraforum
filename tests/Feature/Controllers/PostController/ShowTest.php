@@ -1,17 +1,28 @@
 <?php
 
 use App\Http\Resources\CommentResource;
-use App\Models\Post;
-
-use function Pest\Laravel\get;
 use App\Http\Resources\PostResource;
-use App\Models\Comment;
 
-it('can show a post' , function () {
+use App\Models\Comment;
+use App\Models\Post;
+use App\Models\Topic;
+use function Pest\Laravel\get;
+use Illuminate\Support\Str;
+use Inertia\Testing\AssertableInertia;
+
+
+it('can show a post', function () {
     $post = Post::factory()->create();
 
-    get($post->showRoute())
-        ->assertComponent('Post/Show', true);
+    $response = get(route('posts.show', ['post' => $post->id, 'slug' => Str::slug($post->title)]));
+
+    // 檢查響應是有效的 Inertia 響應
+    $response->assertInertia(fn (AssertableInertia $page) => $page
+        ->component('Post/Show')
+        ->where('post.id', $post->id)
+        ->where('post.title', $post->title)
+        ->has('comments')
+    );
 });
 
 it('passes a post to the view', function () {

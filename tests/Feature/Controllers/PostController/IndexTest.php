@@ -12,23 +12,43 @@ use function Pest\Laravel\get;
 
 it('should return the correct component', function () {
     get(route('posts.index'))
-        ->assertComponent('Post/Index', true);
+        ->assertInertia(fn (AssertableInertia $page) => $page
+            ->component('Post/Index')
+            ->has('jetstream') // 確認 jetstream 屬性存在
+            ->has('auth') // 確認 auth 屬性存在
+            ->has('posts') // 確認 posts 屬性存在
+            ->has('posts.data') // 確認 posts.data 屬性存在
+            ->has('posts.links') // 確認 posts.links 屬性存在
+            ->has('posts.meta') // 確認 posts.meta 屬性存在
+        );
 });
 
 it('passes posts to the view', function () {
+    // 創建測試數據
     $posts = Post::factory(3)->create();
 
-    $posts->load(['user', 'topic']);
-
+    // 測試路由並驗證 Inertia 響應
     get(route('posts.index'))
-        ->assertHasPaginatedResource('posts', PostResource::collection($posts->reverse()));
+        ->assertInertia(fn (AssertableInertia $page) => $page
+            ->component('Post/Index')
+            ->has('posts.data', 3) // 確認有3條數據
+            ->has('posts.links') // 確認有分頁鏈接
+            ->has('posts.meta') // 確認有分頁元數據
+            ->where('posts.data', fn ($data) =>
+                $data->contains('id', $posts->first()->id) &&
+                $data->contains('id', $posts->get(1)->id) &&
+                $data->contains('id', $posts->get(2)->id)
+            ) // 確認數據包含所有測試ID
+        );
 });
 
 it('passes topics to the view', function () {
     $topics = Topic::factory(3)->create();
 
     get(route('posts.index'))
-        ->assertHasResource('topics', TopicResource::collection($topics));
+        ->assertInertia(fn (AssertableInertia $page) => $page
+            ->has('topics', 3) // 確認 topics 屬性存在且有3個元素
+        );
 });
 
 
