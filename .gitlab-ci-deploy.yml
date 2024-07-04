@@ -12,11 +12,11 @@ deploy:
   script:
     - echo "Deploying application..."
     - sshpass -p $SSH_PASSWORD ssh -p $SSH_PORT -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "
-        alias composer='php /home/u625132372/composer'
-        export NVM_DIR=\"\$HOME/.nvm\"
-        [ -s \"\$NVM_DIR/nvm.sh\" ] && \. \"\$NVM_DIR/nvm.sh\"  # This loads nvm
-        [ -s \"\$NVM_DIR/bash_completion\" ] && \. \"\$NVM_DIR/bash_completion\"  # This loads nvm bash_completion
         source ~/.bashrc &&
+        alias composer='php /home/u625132372/composer' &&
+        export NVM_DIR=\"\$HOME/.nvm\" &&
+        [ -s \"\$NVM_DIR/nvm.sh\" ] && \. \"\$NVM_DIR/nvm.sh\" &&
+        [ -s \"\$NVM_DIR/bash_completion\" ] && \. \"\$NVM_DIR/bash_completion\" &&
         composer --version &&
         npm --version &&
         cd $REMOTE_DIR &&
