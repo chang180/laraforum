@@ -1,40 +1,17 @@
 image: php:8.2
 
-services:
-  - mysql:latest
-
-variables:
-  MYSQL_DATABASE: u625132372_laraforum_test
-  MYSQL_ROOT_PASSWORD: secret
-  DB_CONNECTION: mysql
-  DB_HOST: srv1417.hstgr.io
-  DB_PORT: 3306
-  DB_DATABASE: u625132372_laraforum_test
-  DB_USERNAME: u625132372_laraforum_test
-  DB_PASSWORD: $DB_PASSWORD
-
 stages:
   - deploy
+
+before_script:
+  - apt-get update -y
+  - apt-get install -y sshpass
 
 deploy:
   stage: deploy
   script:
     - echo "Deploying application..."
-    - sshpass -p $SSH_PASSWORD ssh -p $SSH_PORT -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "
-      cd $REMOTE_DIR &&
-      if [ ! -d .git ]; then
-        git clone $GIT_REPO_URL .;
-      else
-        git pull origin main;
-      fi &&
-      php composer.phar install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader &&
-      npm install &&
-      php artisan key:generate &&
-      php artisan migrate:fresh --env=testing &&
-      php artisan migrate --force &&
-      php artisan config:cache &&
-      php artisan route:cache &&
-      php artisan view:cache"
+    - sshpass -p $SSH_PASSWORD ssh -p $SSH_PORT -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "cd $REMOTE_DIR && if [ ! -d .git ]; then git clone $GIT_REPO_URL .; else git pull origin main; fi && php composer.phar install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader && npm install && php artisan key:generate && php artisan migrate:fresh --env=testing && php artisan migrate --force && php artisan config:cache && php artisan route:cache && php artisan view:cache"
   only:
     - main
   environment:
