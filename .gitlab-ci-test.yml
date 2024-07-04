@@ -1,0 +1,38 @@
+image: php:8.2
+
+services:
+  - mysql:latest
+
+variables:
+  MYSQL_DATABASE: u625132372_laraforum_test
+  MYSQL_ROOT_PASSWORD: secret
+  DB_CONNECTION: mysql
+  DB_HOST: srv1417.hstgr.io
+  DB_PORT: 3306
+  DB_DATABASE: u625132372_laraforum_test
+  DB_USERNAME: u625132372_laraforum_test
+  DB_PASSWORD: $DB_PASSWORD
+
+stages:
+  - test
+
+cache:
+  paths:
+    - vendor/
+
+test:
+  stage: test
+  script:
+    - apt-get update -y
+    - apt-get install -y nodejs npm libpng-dev libjpeg-dev libfreetype6-dev zip libzip-dev
+    - docker-php-ext-configure gd --with-freetype --with-jpeg
+    - docker-php-ext-install gd pdo_mysql zip
+    - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+    - npm install -g dotenv-cli
+    - cp .env.test .env
+    - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
+    - php artisan key:generate
+    - php artisan migrate:fresh --env=testing
+    - php artisan test --env=testing
+  only:
+    - main

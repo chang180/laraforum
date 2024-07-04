@@ -22,31 +22,42 @@ cache:
   paths:
     - vendor/
 
-before_script:
-  - apt-get update -y
-  - apt-get install -y nodejs npm
-  - apt-get install -y libpng-dev libjpeg-dev libfreetype6-dev
-  - apt-get install -y zip libzip-dev
-  - docker-php-ext-configure gd --with-freetype --with-jpeg
-  - docker-php-ext-install gd
-  - docker-php-ext-install pdo_mysql zip
-  - curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-  - npm install -g dotenv-cli
-  - cp .env.test .env
-  - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
-  - php artisan key:generate
-  - php artisan migrate:fresh --env=testing
-
 build:
   stage: build
   script:
-    - echo "Building the application..."
+    - if [ "$SKIP_BUILD" != "true" ]; then
+        apt-get update -y &&
+        apt-get install -y nodejs npm libpng-dev libjpeg-dev libfreetype6-dev zip libzip-dev &&
+        docker-php-ext-configure gd --with-freetype --with-jpeg &&
+        docker-php-ext-install gd pdo_mysql zip &&
+        curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer &&
+        npm install -g dotenv-cli &&
+        cp .env.test .env &&
+        composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader &&
+        php artisan key:generate &&
+        php artisan migrate:fresh --env=testing;
+      fi
+  only:
+    - main
 
 test:
   stage: test
   script:
-    - php artisan migrate:fresh --env=testing
-    - php artisan test --env=testing
+    - if [ "$SKIP_TEST" != "true" ]; then
+        apt-get update -y &&
+        apt-get install -y nodejs npm libpng-dev libjpeg-dev libfreetype6-dev zip libzip-dev &&
+        docker-php-ext-configure gd --with-freetype --with-jpeg &&
+        docker-php-ext-install gd pdo_mysql zip &&
+        curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer &&
+        npm install -g dotenv-cli &&
+        cp .env.test .env &&
+        composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader &&
+        php artisan key:generate &&
+        php artisan migrate:fresh --env=testing &&
+        php artisan test --env=testing;
+      fi
+  only:
+    - main
 
 deploy:
   stage: deploy
@@ -54,7 +65,23 @@ deploy:
     - echo "Deploying application..."
     - apt-get update -y
     - apt-get install -y sshpass
-    - sshpass -p $SSH_PASSWORD ssh -p $SSH_PORT -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "cd /public_html/laraforum && git pull origin main && composer install && php artisan migrate --force && php artisan config:cache && php artisan route:cache && php artisan view:cache"
+    - sshpass -p $SSH_PASSWORD ssh -p $SSH_PORT -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "
+      cd ~/public_html/laraforum &&
+      git pull origin main &&
+      apt-get update -y &&
+      apt-get install -y nodejs npm libpng-dev libjpeg-dev libfreetype6-dev zip libzip-dev &&
+      docker-php-ext-configure gd --with-freetype --with-jpeg &&
+      docker-php-ext-install gd pdo_mysql zip &&
+      curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer &&
+      npm install -g dotenv-cli &&
+      cp .env.test .env &&
+      composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader &&
+      php artisan key:generate &&
+      php artisan migrate:fresh --env=testing &&
+      php artisan migrate --force &&
+      php artisan config:cache &&
+      php artisan route:cache &&
+      php artisan view:cache"
   only:
     - main
   environment:
