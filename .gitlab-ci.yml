@@ -18,7 +18,8 @@ deploy:
         if [ ! -d .git ]; then
           git clone $GIT_REPO_URL .;
         else
-          git pull origin main;
+          git fetch origin main &&
+          git rebase origin/main;
         fi &&
         composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader &&
         npm install &&
