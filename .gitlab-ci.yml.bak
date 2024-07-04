@@ -14,13 +14,13 @@ variables:
   DB_PASSWORD: $DB_PASSWORD
 
 stages:
-  # - build
-  # - test
+  - build
+  - test
   - deploy
 
-# cache:
-#   paths:
-#     - vendor/
+cache:
+  paths:
+    - vendor/
 
 before_script:
   - apt-get update -y
@@ -37,16 +37,16 @@ before_script:
   - php artisan key:generate
   - php artisan migrate:fresh --env=testing
 
-# build:
-#   stage: build
-#   script:
-#     - echo "Building the application..."
+build:
+  stage: build
+  script:
+    - echo "Building the application..."
 
-# test:
-#   stage: test
-#   script:
-#     - php artisan migrate:fresh --env=testing
-#     - php artisan test --env=testing
+test:
+  stage: test
+  script:
+    - php artisan migrate:fresh --env=testing
+    - php artisan test --env=testing
 
 deploy:
   stage: deploy
