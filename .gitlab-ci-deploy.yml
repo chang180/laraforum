@@ -13,12 +13,7 @@ deploy:
     - echo "Deploying application..."
     - sshpass -p $SSH_PASSWORD ssh -p $SSH_PORT -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST "
         source ~/.bashrc &&
-        alias composer='php /home/u625132372/composer' &&
-        export NVM_DIR=\"\$HOME/.nvm\" &&
-        [ -s \"\$NVM_DIR/nvm.sh\" ] && \. \"\$NVM_DIR/nvm.sh\" &&
-        [ -s \"\$NVM_DIR/bash_completion\" ] && \. \"\$NVM_DIR/bash_completion\" &&
-        composer --version &&
-        npm --version &&
+        php /home/u625132372/composer --version &&
         cd $REMOTE_DIR &&
         if [ ! -d .git ]; then
           git clone $GIT_REPO_URL .;
@@ -28,7 +23,7 @@ deploy:
           git commit -m 'Temporary commit for rebase' || echo 'No changes to commit' &&
           git rebase origin/main;
         fi &&
-        composer install &&
+        php /home/u625132372/composer install &&
         npm install &&
         php artisan key:generate &&
         php artisan migrate:fresh --env=testing &&
