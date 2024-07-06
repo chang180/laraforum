@@ -31,12 +31,15 @@ class DatabaseSeeder extends Seeder
             ->recycle([$users, $topics])
             ->create();
 
-        $chang180 = User::factory()
+
+        if (!User::where('name', 'chang180')->exists()) {
+            $chang180 = User::factory()
             ->has(Post::factory()->count(10)->recycle($topics)->withFixture())
             ->has(Comment::factory()->count(50)->recycle($posts))
             ->create([
                 'name' => 'chang180',
                 'email' => 'chang180@gmail.com',
             ]);
+        }
     }
 }

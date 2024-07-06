@@ -8,10 +8,10 @@
         "php": "^8.2",
         "inertiajs/inertia-laravel": "^1.0",
         "laravel/framework": "^11.0",
-        "laravel/jetstream": "^5.0@dev",
+        "laravel/jetstream": "^5.0",
         "laravel/prompts": "^0.1.16",
         "laravel/sanctum": "^4.0",
-        "laravel/telescope": "^5.0@dev",
+        "laravel/telescope": "^5.0",
         "laravel/tinker": "^2.9",
         "tightenco/ziggy": "^1.0"
     },
