@@ -10,6 +10,7 @@ use App\Http\Resources\CommentResource;
 use App\Http\Resources\TopicResource;
 use App\Models\Topic;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use App\Support\PostFixtures;
 
 class PostController extends Controller
 {
@@ -106,4 +107,5 @@ class PostController extends Controller
     {
         //
     }
+
 }
