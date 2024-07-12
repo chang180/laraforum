@@ -44,11 +44,11 @@ return [
     |
     */
 
-    'guard' => 'sanctum',
+    'guard' => 'web',
 
     /*
     |--------------------------------------------------------------------------
-    | Features
+    | Feawures
     |--------------------------------------------------------------------------
     |
     | Some of Jetstream's features are optional. You may disable the features
