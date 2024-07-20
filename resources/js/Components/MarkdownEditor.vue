@@ -192,17 +192,16 @@ import StarterKit from "@tiptap/starter-kit";
 import { EditorContent, useEditor } from "@tiptap/vue-3";
 import { Markdown } from "tiptap-markdown";
 import { Link } from "@tiptap/extension-link";
-import { watch } from "vue";
+import { onMounted, watch } from "vue";
 import "remixicon/fonts/remixicon.css";
 import Placeholder from "@tiptap/extension-placeholder";
 
 const props = defineProps({
-    modelValue: "",
     editorClass: "",
     placeholder: null,
 });
 
-const emit = defineEmits(["update:modelValue"]);
+const model = defineModel();
 
 const editor = useEditor({
     extensions: [
@@ -224,21 +223,21 @@ const editor = useEditor({
             class: `min-h-[512px] prose prose-sm max-w-none w-full py-1.5 px-3 ${props.editorClass}`,
         },
     },
-    onUpdate: () => {
-        emit("update:modelValue", editor.value?.storage.markdown.getMarkdown());
-    },
+    onUpdate: () =>
+        (model.value = editor.value?.storage.markdown.getMarkdown()),
 });
 
-defineExpose({focus: () => editor.value.commands.focus()});
-
-watch(
-    () => props.modelValue,
-    (value) => {
-        if (value === editor.value?.storage.markdown.getMarkdown()) return;
-        editor.value?.commands.setContent(value);
-    },
-    { immediate: true }
-);
+defineExpose({ focus: () => editor.value.commands.focus() });
+onMounted(() => {
+    watch(
+        model,
+        (value) => {
+            if (value === editor.value?.storage.markdown.getMarkdown()) return;
+            editor.value?.commands.setContent(value);
+        },
+        { immediate: true }
+    );
+});
 
 const promptUserForLink = () => {
     if (editor.value?.isActive("link")) {
