@@ -1,13 +1,17 @@
 <template>
     <AppLayout :title="post.title">
         <Container>
-            <Pill :href="route('posts.index', { topic: post.topic.slug })"
-                >{{ post.topic.name }}</Pill>
+            <Pill :href="route('posts.index', { topic: post.topic.slug })">{{
+                post.topic.name
+            }}</Pill>
             <PageHeading class="mt-2">{{ post.title }}</PageHeading>
             <span class="block text-sm text-gray-600"
                 >{{ formattedDate }} ago by {{ post.user.name }}</span
             >
-            <article class="mt-6 prose-sm prose max-w-none" v-html="post.html"></article>
+            <article
+                class="mt-6 prose-sm prose max-w-none"
+                v-html="post.html"
+            ></article>
             <div class="mt-8">
                 <h2 class="text-xl font-bold">Comments</h2>
 
@@ -28,7 +32,7 @@
                             v-model="commentForm.body"
                             id="body"
                             placeholder="Put in some words..."
-                            editorClass="min-h-[160px]"
+                            editorClass="!min-h-[160px]"
                         />
                         <InputError
                             :message="commentForm.errors.body"
@@ -155,7 +159,10 @@ const deleteComment = async (commentID) => {
     router.delete(
         route("comments.destroy", {
             comment: commentID,
-            page: props.comments.meta.current_page,
+            page:
+                props.comments.data.length > 1
+                    ? props.comments.meta.current_page
+                    : Math.max(props.comments.meta.current_page - 1, 1),
         }),
         {
             preserveScroll: true,
