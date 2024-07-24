@@ -1,13 +1,21 @@
 <template>
+    <Head>
+        <title>{{ post.title }}</title>
+        <link rel="canonical" :href="post.routes.show" />
+    </Head>
     <AppLayout :title="post.title">
         <Container>
-            <Pill :href="route('posts.index', { topic: post.topic.slug })"
-                >{{ post.topic.name }}</Pill>
+            <Pill :href="route('posts.index', { topic: post.topic.slug })">{{
+                post.topic.name
+            }}</Pill>
             <PageHeading class="mt-2">{{ post.title }}</PageHeading>
             <span class="block text-sm text-gray-600"
-                >{{ formattedDate }} ago by {{ post.user.name }}</span
+                >{{ formattedDate }} by {{ post.user.name }}</span
             >
-            <article class="mt-6 prose-sm prose max-w-none" v-html="post.html"></article>
+            <article
+                class="mt-6 prose-sm prose max-w-none"
+                v-html="post.html"
+            ></article>
             <div class="mt-8">
                 <h2 class="text-xl font-bold">Comments</h2>
 
@@ -75,7 +83,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import { computed, ref } from "vue";
 // import { formatDistance, parseISO } from 'date-fns';
 import { relativeDate } from "@/Utilities/date.js";
-import { useForm, router } from "@inertiajs/vue3";
+import { useForm, router, Head } from "@inertiajs/vue3";
 
 import Container from "@/Components/Container.vue";
 import Pagination from "@/Components/Pagination.vue";

@@ -36,7 +36,7 @@
                             >{{ post.title }}</span
                         >
                         <span class="block text-sm text-gray-600"
-                            >{{ formattedDate(post) }} ago by
+                            >{{ formattedDate(post) }} by
                             {{ post.user.name }}</span
                         >
                     </Link>

@@ -11,7 +11,7 @@
             <span
                 class="block pt-1 text-xs text-gray-600 first-letter:uppercase"
                 >By {{ comment.user.name }}
-                {{ relativeDate(comment.created_at) }} ago</span
+                {{ relativeDate(comment.created_at) }}</span
             >
             <div
                 class="flex justify-end mt-2 space-x-3 empty:hidden"
