@@ -6,6 +6,10 @@ use Illuminate\Support\Facades\Http;
 
 class PostFixtures
 {
+
+    // 聲明靜態屬性 $fixtures
+    protected static $fixtures;
+
     public static function getFixtures(): Collection
     {
         if (is_null(self::$fixtures)) {
