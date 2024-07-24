@@ -66,17 +66,19 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/vue/solid";
 import { Link } from "@inertiajs/vue3";
 import { computed } from "vue";
 
-const props = defineProps(
-    {
-        meta: {
-            type: Object,
-            required: true,
-        },
-        only: {
-            type: Array,
-            default: () => [],
-        },
-    }
+const props = defineProps({
+    meta: {
+        type: Object,
+        required: true,
+    },
+    only: {
+        type: Array,
+        default: () => [],
+    },
+});
+
+const only = computed(() =>
+    props.only.length === 0 ? [] : [...props.only, "jetstream"]
 );
 
 const previousUrl = computed(() => props.meta.links[0].url);

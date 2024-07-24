@@ -36,7 +36,7 @@
                             v-model="commentForm.body"
                             id="body"
                             placeholder="Put in some words..."
-                            editorClass="min-h-[160px]"
+                            editorClass="!min-h-[160px]"
                         />
                         <InputError
                             :message="commentForm.errors.body"
@@ -163,7 +163,10 @@ const deleteComment = async (commentID) => {
     router.delete(
         route("comments.destroy", {
             comment: commentID,
-            page: props.comments.meta.current_page,
+            page:
+                props.comments.data.length > 1
+                    ? props.comments.meta.current_page
+                    : Math.max(props.comments.meta.current_page - 1, 1),
         }),
         {
             preserveScroll: true,
