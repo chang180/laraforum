@@ -11,7 +11,8 @@
             <span
                 class="block pt-1 text-xs text-gray-600 first-letter:uppercase"
                 >By {{ comment.user.name }}
-                {{ relativeDate(comment.created_at) }}</span
+                {{ relativeDate(comment.created_at) }} | <span class="text-pink-500">{{  comment.likes_count }} like(s)</span>
+                </span
             >
             <div
                 class="flex justify-end mt-2 space-x-3 empty:hidden"

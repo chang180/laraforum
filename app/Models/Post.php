@@ -46,7 +46,7 @@ class Post extends Model
         return route('posts.show', [$this, Str::slug($this->title), ...$parameters]);
     }
 
-    public function likkes(): MorphMany
+    public function likes(): MorphMany
     {
         return $this->morphMany(Like::class,'likeable');
     }

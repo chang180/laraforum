@@ -12,6 +12,9 @@
             <span class="block text-sm text-gray-600"
                 >{{ formattedDate }} by {{ post.user.name }}</span
             >
+            <div class="mt-4">
+                <span class="text-pink-500 bold">{{  post.likes_count }} like(s)</span>
+            </div>
             <article
                 class="mt-6 prose-sm prose max-w-none"
                 v-html="post.html"
