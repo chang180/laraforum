@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
-use App\Models\User;
 use App\Models\Comment;
 use App\Models\Concerns\ConvertMarkdownToHtml;
-use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Support\Str;
 
 class Post extends Model
 {
@@ -37,9 +37,8 @@ class Post extends Model
 
     public function title(): Attribute
     {
-        return Attribute::set(fn ($value) => Str::title($value));
+        return Attribute::set(fn($value) => Str::title($value));
     }
-
 
     public function showRoute(array $parameters = []): string
     {
@@ -48,6 +47,6 @@ class Post extends Model
 
     public function likes(): MorphMany
     {
-        return $this->morphMany(Like::class,'likeable');
+        return $this->morphMany(Like::class, 'likeable');
     }
 }

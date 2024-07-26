@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Post;
 use App\Models\Comment;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -33,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
         Relation::enforceMorphMap([
             'post' => Post::class,
             'comment' => Comment::class,
+            'user' => User::class,
         ]);
 
     }

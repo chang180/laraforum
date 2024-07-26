@@ -1,16 +1,17 @@
 <?php
 
-use App\Http\Controllers\CommentController;
-use App\Http\Controllers\PostController;
-use App\Http\Resources\CommentResource;
-use App\Http\Resources\PostResource;
-use App\Http\Resources\UserResource;
-use App\Models\Comment;
 use App\Models\Post;
 use App\Models\User;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Models\Comment;
+use App\Http\Resources\PostResource;
+use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
+use App\Http\Resources\CommentResource;
+use App\Http\Controllers\LikeController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\CommentController;
 
 
 
@@ -35,6 +36,8 @@ Route::middleware([
     Route::resource('posts', PostController::class)->only(['create', 'store']);
 
     Route::resource('posts.comments', CommentController::class)->shallow()->only(['store', 'destroy', 'update']);
+
+    Route::post('/likes/{type}/{id}', [LikeController::class, 'store'])->name('likes.store');
 });
 
 Route::get('posts/{topic?}', [PostController::class, 'index'])->name('posts.index');
