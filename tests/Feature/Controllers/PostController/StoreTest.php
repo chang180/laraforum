@@ -7,6 +7,7 @@ use App\Models\User;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\post;
 
+
 beforeEach(function () {
     $this->validData = fn () => [
         'title' => 'My first post',
@@ -21,6 +22,7 @@ it('requires authentication', function () {
 });
 
 it('stores a post', function () {
+    /** @var User $user */
     $user = User::factory()->create();
     $data = value($this->validData);
 
@@ -33,12 +35,16 @@ it('stores a post', function () {
 });
 
 it('redirects to the post show page', function () {
-    actingAs(User::factory()->create())->post(route('posts.store'), value($this->validData))
+    /** @var User $user */
+    $user = User::factory()->create();
+    actingAs($user)->post(route('posts.store'), value($this->validData))
         ->assertRedirect(Post::latest('id')->first()->showRoute());
 });
 
 it('requres valid data', function (array $badData, array|string $errors) {
-    actingAs(User::factory()->create())->post(route('posts.store'), [...value($this->validData), ...$badData])
+    /** @var User $user */
+    $user = User::factory()->create();
+    actingAs($user)->post(route('posts.store'), [...value($this->validData), ...$badData])
         ->assertInvalid($errors);
 })->with([
     [['title' => null], 'title'],

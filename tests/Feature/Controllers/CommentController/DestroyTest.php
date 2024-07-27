@@ -33,7 +33,9 @@ it('redirects to the post show page', function () {
 it('prevent deleting a comment from another user', function () {
     $comment = Comment::factory()->create();
 
-    actingAs(User::factory()->create())
+    /** @var User $user */
+    $user = User::factory()->create();
+    actingAs($user)
         ->delete(route('comments.destroy', $comment))
         ->assertForbidden();
 
