@@ -13,7 +13,27 @@
                 >{{ formattedDate }} by {{ post.user.name }}</span
             >
             <div class="mt-4">
-                <span class="text-pink-500 bold">{{  post.likes_count }} like(s)</span>
+                <span class="text-pink-500 bold"
+                    >{{ post.likes_count }} like(s)</span
+                >
+                <div class="mt-2" v-if="$page.props.auth.user">
+                    <Link v-if="post.can.like"
+                        :href="route('likes.store', ['post', post.id])"
+                        class="inline-block bg-indigo-600 hover:bg-pink-500 transition-colors text-white py-1.5 px-3 rounded-full"
+                        method="post"
+                    >
+                    <HandThumbUpIcon class="inline-block mr-1 size-4" />
+                        Like Post
+                    </Link>
+                    <Link v-else
+                        :href="route('likes.destroy', ['post', post.id])"
+                        class="inline-block bg-indigo-600 hover:bg-pink-500 transition-colors text-white py-1.5 px-3 rounded-full"
+                        method="delete"
+                    >
+                    <HandThumbDownIcon class="inline-block mr-1 size-4" />
+                        Unlike Post
+                    </Link>
+                </div>
             </div>
             <article
                 class="mt-6 prose-sm prose max-w-none"
@@ -86,7 +106,7 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import { computed, ref } from "vue";
 // import { formatDistance, parseISO } from 'date-fns';
 import { relativeDate } from "@/Utilities/date.js";
-import { useForm, router, Head } from "@inertiajs/vue3";
+import { useForm, router, Head, Link } from "@inertiajs/vue3";
 
 import Container from "@/Components/Container.vue";
 import Pagination from "@/Components/Pagination.vue";
@@ -99,6 +119,10 @@ import { useConfirm } from "@/Utilities/Composables/useComfirm";
 import MarkdownEditor from "@/Components/MarkdownEditor.vue";
 import PageHeading from "@/Components/pageHeading.vue";
 import Pill from "@/Components/Pill.vue";
+import {
+    HandThumbUpIcon,
+    HandThumbDownIcon,
+} from "@heroicons/vue/24/solid";
 
 const props = defineProps(["post", "comments"]);
 

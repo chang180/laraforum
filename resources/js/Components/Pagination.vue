@@ -62,7 +62,7 @@
 </template>
 
 <script setup>
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/vue/solid";
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/vue/24/solid";
 import { Link } from "@inertiajs/vue3";
 import { computed } from "vue";
 

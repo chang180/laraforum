@@ -19,7 +19,7 @@
         "vue": "^3.4.0"
     },
     "dependencies": {
-        "@heroicons/vue": "^1.0.6",
+        "@heroicons/vue": "^2.1.5",
         "@inertiajs/inertia-vue3": "^0.6.0",
         "@tiptap/extension-link": "^2.2.4",
         "@tiptap/extension-placeholder": "^2.2.4",
