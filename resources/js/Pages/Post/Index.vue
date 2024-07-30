@@ -16,10 +16,19 @@
                         <Pill :href="route('posts.index', { topic: topic.slug })"
                         :filled="topic.slug === selectedTopic?.slug"
                         >
-                            {{ topic.name }}
+                            {{ topic.name }}244
                         </Pill>
                     </li>
                 </menu>
+                <form class="mt-4" @submit.prevent="search">
+                    <div>
+                        <InputLabel for="query">Search</InputLabel>
+                        <div class="flex mt-1 space-x-2">
+                            <TextInput class="w-full" id="query" v-model="searchForm.query" placeholder="Search posts..." />
+                            <SecondaryButton type="smbmit">Search</SecondaryButton>
+                        </div>
+                    </div>
+                </form>
             </div>
             <ul class="mt-4 devide-y">
                 <li
@@ -53,13 +62,22 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Container from "@/Components/Container.vue";
 import Pagination from "@/Components/Pagination.vue";
-import { Link } from "@inertiajs/vue3";
+import { Link, useForm } from "@inertiajs/vue3";
 import { formatDistance, parseISO } from "date-fns";
 import { relativeDate } from "@/Utilities/date.js";
 import PageHeading from "@/Components/pageHeading.vue";
 import Pill from "@/Components/Pill.vue";
+import InputLabel from "@/Components/InputLabel.vue";
+import TextInput from "@/Components/TextInput.vue";
+import SecondaryButton from "@/Components/SecondaryButton.vue";
 
-defineProps(["posts", "topics", "selectedTopic"]);
+const props = defineProps(["posts", "topics", "selectedTopic", "query"]);
 
 const formattedDate = (post) => relativeDate(post.created_at);
+
+const searchForm = useForm({
+    query: props.query,
+});
+
+const search = () => searchForm.get(route('posts.index', { search: searchForm.query }));
 </script>

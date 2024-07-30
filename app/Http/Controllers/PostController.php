@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use App\Http\Resources\PostResource;
 use App\Http\Resources\CommentResource;
+use App\Http\Resources\PostResource;
 use App\Http\Resources\TopicResource;
+use App\Models\Post;
 use App\Models\Topic;
 use Illuminate\Contracts\Database\Eloquent\Builder;
-use App\Support\PostFixtures;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
@@ -23,18 +22,23 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Topic $topic = null)
+    public function index(Request $request, Topic $topic = null)
     {
         $posts = Post::with(['user', 'topic'])
-            ->when($topic, fn (Builder $query) => $query->whereBelongsTo($topic))
+            ->when($topic, fn(Builder $query) => $query->whereBelongsTo($topic))
+            ->when(
+                $request->query('query'),
+                fn(Builder $query) => $query->whereAny(['title', 'body'], 'like', "%{$request->query('query')}%")
+            )
             ->latest()
             ->latest('id')
             ->paginate();
 
         return inertia('Post/Index', [
             'posts' => PostResource::collection($posts),
-            'topics' => fn () => TopicResource::collection(Topic::all()),
-            'selectedTopic' => fn () => $topic ? new TopicResource($topic) : null,
+            'topics' => fn() => TopicResource::collection(Topic::all()),
+            'selectedTopic' => fn() => $topic ? new TopicResource($topic) : null,
+            'query' => $request->query('query'),
         ]);
     }
 
@@ -44,7 +48,7 @@ class PostController extends Controller
     public function create()
     {
         return inertia('Post/Create', [
-            'topics' => fn () => TopicResource::collection(Topic::all()),
+            'topics' => fn() => TopicResource::collection(Topic::all()),
         ]);
     }
 
@@ -60,7 +64,7 @@ class PostController extends Controller
         ]);
 
         $post = Post::create([
-            ...$data,
+             ...$data,
             'user_id' => $request->user()->id,
         ]);
 
@@ -80,10 +84,10 @@ class PostController extends Controller
         $post->load('user', 'topic');
 
         return inertia('Post/Show', [
-            'post' => fn () => PostResource::make($post)->withLikePermission(),
+            'post' => fn() => PostResource::make($post)->withLikePermission(),
             'comments' => function () use ($post) {
                 $commentResource = CommentResource::collection($post->comments()->with('user')->latest()->latest('id')->paginate(10));
-                $commentResource->collection->transform(fn ($comment) => $comment->withLikePermission());
+                $commentResource->collection->transform(fn($comment) => $comment->withLikePermission());
                 return $commentResource;
             },
         ]);
