@@ -10,13 +10,13 @@
                 </p>
                 <menu class="flex pt-1 pb-2 mt-3 space-x-1 overflow-x-auto">
                     <li>
-                        <Pill :href="route('posts.index')" :filled="!selectedTopic">All Posts</Pill>
+                        <Pill :href="route('posts.index', { query:searchForm.query })" :filled="!selectedTopic">All Posts</Pill>
                     </li>
                     <li v-for="topic in topics" :key="topic.id">
-                        <Pill :href="route('posts.index', { topic: topic.slug })"
+                        <Pill :href="route('posts.index', { topic: topic.slug, query: searchForm.query })"
                         :filled="topic.slug === selectedTopic?.slug"
                         >
-                            {{ topic.name }}244
+                            {{ topic.name }}
                         </Pill>
                     </li>
                 </menu>
@@ -26,6 +26,7 @@
                         <div class="flex mt-1 space-x-2">
                             <TextInput class="w-full" id="query" v-model="searchForm.query" placeholder="Search posts..." />
                             <SecondaryButton type="smbmit">Search</SecondaryButton>
+                            <DangerButton v-if="searchForm.query" @click="clearSearch()">Clear</DangerButton>
                         </div>
                     </div>
                 </form>
@@ -62,7 +63,7 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Container from "@/Components/Container.vue";
 import Pagination from "@/Components/Pagination.vue";
-import { Link, useForm } from "@inertiajs/vue3";
+import { Link, useForm, usePage } from "@inertiajs/vue3";
 import { formatDistance, parseISO } from "date-fns";
 import { relativeDate } from "@/Utilities/date.js";
 import PageHeading from "@/Components/pageHeading.vue";
@@ -70,6 +71,7 @@ import Pill from "@/Components/Pill.vue";
 import InputLabel from "@/Components/InputLabel.vue";
 import TextInput from "@/Components/TextInput.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
+import DangerButton from "@/Components/DangerButton.vue";
 
 const props = defineProps(["posts", "topics", "selectedTopic", "query"]);
 
@@ -77,7 +79,15 @@ const formattedDate = (post) => relativeDate(post.created_at);
 
 const searchForm = useForm({
     query: props.query,
+    page: 1,
 });
 
-const search = () => searchForm.get(route('posts.index', { search: searchForm.query }));
+const page = usePage();
+
+const search = () => searchForm.get(page.url);
+
+const clearSearch = () => {
+    searchForm.query = "";
+    search();
+};
 </script>

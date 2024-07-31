@@ -32,7 +32,8 @@ class PostController extends Controller
             )
             ->latest()
             ->latest('id')
-            ->paginate();
+            ->paginate()
+            ->withQueryString();
 
         return inertia('Post/Index', [
             'posts' => PostResource::collection($posts),
