@@ -3,7 +3,7 @@ name: My Work Flow
 on:
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   my-work-flow:
