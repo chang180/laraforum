@@ -14,10 +14,9 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const prNumber = context.payload.pull_request.number;
             github.rest.issues.createComment({
-              issue_number: prNumber,
+              issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: 'My Comment on PR 🚀'
-            });
+              body: '👋 Thanks for reporting!'
+            })
