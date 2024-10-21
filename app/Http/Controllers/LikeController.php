@@ -17,6 +17,7 @@ class LikeController extends Controller
      */
     public function store(Request $request, string $type, int $id)
     {
+        // random commit
         $likeable = $this->findLikeable($type, $id);
 
         Gate::authorize('create', [Like::class, $likeable]);
