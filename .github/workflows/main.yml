@@ -1,1 +1,22 @@
 name: My Work Flow
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  my-work-flow:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create a Comment on the PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'My Comment on PR 🚀'
+            })
