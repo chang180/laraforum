@@ -7,7 +7,7 @@ on:
 
 jobs:
   my-work-flow:
-    runs-on: ubuntu-latestZ
+    runs-on: ubuntu-latest
 
     steps:
       - name: Create a Comment on the PR
