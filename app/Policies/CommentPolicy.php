@@ -4,7 +4,6 @@ namespace App\Policies;
 
 use App\Models\Comment;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class CommentPolicy
 {
@@ -15,7 +14,7 @@ class CommentPolicy
     {
         $userCheck = ($user->id === $comment->user_id);
 
-        return  $userCheck;
+        return $userCheck;
     }
 
     /**
@@ -27,6 +26,6 @@ class CommentPolicy
 
         $commentCheck = $comment->created_at->isAfter(now()->subHour());
 
-        return  $userCheck && $commentCheck;
+        return $userCheck && $commentCheck;
     }
 }

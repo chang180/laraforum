@@ -20,7 +20,7 @@ class LikeFactory extends Factory
     public function definition(): array
     {
         return [
-            'user_id' => User::factory(['email' => 'test+' . Str::uuid() . '@example.com']),
+            'user_id' => User::factory(['email' => 'test+'.Str::uuid().'@example.com']),
             'likeable_type' => $this->likeableType(...),
             'likeable_id' => Post::factory(),
         ];
@@ -35,5 +35,4 @@ class LikeFactory extends Factory
 
         return (new $modelName)->getMorphClass();
     }
-
 }

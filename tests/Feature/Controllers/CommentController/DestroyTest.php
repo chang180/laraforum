@@ -1,13 +1,12 @@
 <?php
 
-use App\Models\Post;
 use App\Models\Comment;
+use App\Models\Post;
 use App\Models\User;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertModelMissing;
 use function Pest\Laravel\delete;
-
 
 it('requires authentication', function () {
     delete(route('comments.destroy', Post::factory()->create(), Comment::factory()->create()))
@@ -60,4 +59,3 @@ it('redirects to the post show page with the page query parameter', function () 
         ->delete(route('comments.destroy', ['comment' => $comment, 'page' => 2]))
         ->assertRedirect($comment->post->showRoute(['page' => 2]));
 });
-

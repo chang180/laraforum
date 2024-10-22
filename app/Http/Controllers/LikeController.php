@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Like;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -37,7 +36,7 @@ class LikeController extends Controller
         $modelName = Relation::getMorphedModel($type);
 
         if ($modelName === null) {
-            throw new ModelNotFoundException();
+            throw new ModelNotFoundException;
         }
 
         $likeable = $modelName::findOrFail($id);

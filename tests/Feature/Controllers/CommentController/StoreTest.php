@@ -19,13 +19,13 @@ it('cant store a comment', function () {
 
     actingAs($user)
         ->post(route('posts.comments.store', $post), [
-            'body' => 'This is a comment'
+            'body' => 'This is a comment',
         ]);
 
     $this->assertDatabaseHas(Comment::class, [
         'post_id' => $post->id,
         'user_id' => $user->id,
-        'body' => 'This is a comment'
+        'body' => 'This is a comment',
     ]);
 });
 
@@ -36,7 +36,7 @@ it('redirects to the post show page after storing a comment', function () {
     $user = User::factory()->create();
     actingAs($user)
         ->post(route('posts.comments.store', $post), [
-            'body' => 'This is a comment'
+            'body' => 'This is a comment',
         ])
         ->assertRedirect($post->showRoute());
 });

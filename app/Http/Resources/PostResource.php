@@ -39,7 +39,7 @@ class PostResource extends JsonResource
                 'show' => $this->showRoute(),
             ],
             'can' => [
-                'like' => $this->when($this->withLikePermission, fn() => $request->user()?->can('create', [Like::class, $this->resource])),
+                'like' => $this->when($this->withLikePermission, fn () => $request->user()?->can('create', [Like::class, $this->resource])),
             ],
         ];
     }

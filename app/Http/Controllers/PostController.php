@@ -13,7 +13,6 @@ use Illuminate\Support\Str;
 
 class PostController extends Controller
 {
-
     public function __construct()
     {
         $this->authorizeResource(Post::class);
@@ -22,25 +21,25 @@ class PostController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, Topic $topic = null)
+    public function index(Request $request, ?Topic $topic = null)
     {
 
         if ($request->query('query')) {
             $posts = Post::search($request->query('query'))
-                ->query(fn(Builder $query) => $query->with(['user', 'topic']))
-                ->when($topic, fn(\Laravel\Scout\Builder $query) => $query->where('topic_id', $topic->id));
+                ->query(fn (Builder $query) => $query->with(['user', 'topic']))
+                ->when($topic, fn (\Laravel\Scout\Builder $query) => $query->where('topic_id', $topic->id));
 
         } else {
             $posts = Post::with(['user', 'topic'])
-                ->when($topic, fn(Builder $query) => $query->whereBelongsTo($topic))
+                ->when($topic, fn (Builder $query) => $query->whereBelongsTo($topic))
                 ->latest()
                 ->latest('id');
         }
 
         return inertia('Post/Index', [
             'posts' => PostResource::collection($posts->paginate()->withQueryString()),
-            'topics' => fn() => TopicResource::collection(Topic::all()),
-            'selectedTopic' => fn() => $topic ? new TopicResource($topic) : null,
+            'topics' => fn () => TopicResource::collection(Topic::all()),
+            'selectedTopic' => fn () => $topic ? new TopicResource($topic) : null,
             'query' => $request->query('query'),
         ]);
     }
@@ -51,7 +50,7 @@ class PostController extends Controller
     public function create()
     {
         return inertia('Post/Create', [
-            'topics' => fn() => TopicResource::collection(Topic::all()),
+            'topics' => fn () => TopicResource::collection(Topic::all()),
         ]);
     }
 
@@ -67,7 +66,7 @@ class PostController extends Controller
         ]);
 
         $post = Post::create([
-             ...$data,
+            ...$data,
             'user_id' => $request->user()->id,
         ]);
 
@@ -80,17 +79,18 @@ class PostController extends Controller
     public function show(Request $request, Post $post)
     {
         // post/{post}/{slug}?page=1
-        if (!Str::contains($request->url(), $post->showRoute())) {
+        if (! Str::contains($request->url(), $post->showRoute())) {
             return redirect($post->showRoute($request->query()), 301);
         }
 
         $post->load('user', 'topic');
 
         return inertia('Post/Show', [
-            'post' => fn() => PostResource::make($post)->withLikePermission(),
+            'post' => fn () => PostResource::make($post)->withLikePermission(),
             'comments' => function () use ($post) {
                 $commentResource = CommentResource::collection($post->comments()->with('user')->latest()->latest('id')->paginate(10));
-                $commentResource->collection->transform(fn($comment) => $comment->withLikePermission());
+                $commentResource->collection->transform(fn ($comment) => $comment->withLikePermission());
+
                 return $commentResource;
             },
         ]);
@@ -99,9 +99,7 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Post $post)
-    {
-    }
+    public function edit(Post $post) {}
 
     /**
      * Update the specified resource in storage.
@@ -118,5 +116,4 @@ class PostController extends Controller
     {
         //
     }
-
 }
