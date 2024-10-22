@@ -5,8 +5,8 @@ namespace Database\Seeders;
 use App\Models\Like;
 use App\Models\Post;
 use Illuminate\Database\Seeder;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Support\LazyCollection;
+
 use function Laravel\Prompts\progress;
 
 class LikeLoadTestSeeder extends Seeder
@@ -22,7 +22,7 @@ class LikeLoadTestSeeder extends Seeder
 
         /** @var \Laravel\Prompts\Progress $progress */
         $progress->start();
-        LazyCollection::times(500)->each(function () use ($post,$progress) {
+        LazyCollection::times(500)->each(function () use ($post, $progress) {
             Like::factory(100)->for($post, 'likeable')->create();
             $progress->advance(100);
         });

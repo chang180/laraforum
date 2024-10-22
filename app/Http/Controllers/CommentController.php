@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
-
     /**
      * Store a newly created resource in storage.
      */
@@ -22,7 +21,7 @@ class CommentController extends Controller
             ...$data,
             'post_id' => $post->id,
             'user_id' => $request->user()->id,
-            ]);
+        ]);
 
         return redirect($post->showRoute())
             ->banner('Comment added.');
@@ -40,20 +39,20 @@ class CommentController extends Controller
 
         $comment->update($data);
 
-        return redirect($comment->post->showRoute( ['page' => $request->query('page')]))
+        return redirect($comment->post->showRoute(['page' => $request->query('page')]))
             ->banner('Comment updated.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request,Comment $comment): RedirectResponse
+    public function destroy(Request $request, Comment $comment): RedirectResponse
     {
         Auth::user()->can('delete', $comment) ?: abort(403);
 
         $comment->delete();
 
-        return redirect($comment->post->showRoute( ['page' => $request->query('page')]))
+        return redirect($comment->post->showRoute(['page' => $request->query('page')]))
             ->banner('Comment deleted.');
     }
 }

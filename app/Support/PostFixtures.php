@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Support;
 
 use Illuminate\Support\Collection;
@@ -6,7 +7,6 @@ use Illuminate\Support\Facades\Http;
 
 class PostFixtures
 {
-
     // 聲明靜態屬性 $fixtures
     protected static $fixtures;
 
@@ -21,8 +21,9 @@ class PostFixtures
 
             $data = $response->json();
 
-            if (!isset($data['data']['titles'])) {
+            if (! isset($data['data']['titles'])) {
                 self::$fixtures = collect();
+
                 return self::$fixtures;
             }
 
@@ -34,18 +35,18 @@ class PostFixtures
             });
         }
 
-        return once(fn() => self::$fixtures);
+        return once(fn () => self::$fixtures);
     }
 
     private static function generateBody($movie): string
     {
         $rating = $movie['rating']['aggregate_rating'] ?? 'N/A';
-        $genres = !empty($movie['genres']) ? implode(', ', $movie['genres']) : 'N/A';
+        $genres = ! empty($movie['genres']) ? implode(', ', $movie['genres']) : 'N/A';
         $plot = $movie['plot'] ?? 'N/A';
 
         return "# {$movie['primary_title']}\n\n"
-            . "## 評分: $rating\n\n"
-            . "### 類型: $genres\n\n"
-            . "#### 簡介:\n$plot\n";
+            ."## 評分: $rating\n\n"
+            ."### 類型: $genres\n\n"
+            ."#### 簡介:\n$plot\n";
     }
 }
