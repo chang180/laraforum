@@ -1,7 +1,7 @@
 name: Laravel Pint
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
@@ -32,5 +32,5 @@ jobs:
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'github_action@laraforum.test'
           git add .
-          git commit -m "Run Laravel Pint"
+          git commit -m "Run Laravel Pint" || exit
           git push
