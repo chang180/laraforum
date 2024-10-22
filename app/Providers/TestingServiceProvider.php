@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
-use Inertia\Testing\AssertableInertia;
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\ServiceProvider;
 use Illuminate\Testing\TestResponse;
+use Inertia\Testing\AssertableInertia;
 
 class TestingServiceProvider extends ServiceProvider
 {
@@ -23,7 +23,7 @@ class TestingServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (!$this->app->runningUnitTests()) {
+        if (! $this->app->runningUnitTests()) {
             return;
         }
 

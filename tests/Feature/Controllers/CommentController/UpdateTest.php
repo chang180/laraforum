@@ -5,7 +5,6 @@ use App\Models\Comment;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\put;
 
-
 it('requres authentication', function () {
     put(route('comments.update', Comment::factory()->create()))
         ->assertRedirect(route('login'));

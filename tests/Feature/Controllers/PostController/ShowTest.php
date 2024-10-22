@@ -4,6 +4,7 @@ use App\Http\Resources\CommentResource;
 use App\Http\Resources\PostResource;
 use App\Models\Comment;
 use App\Models\Post;
+
 use function Pest\Laravel\get;
 
 it('can show a post', function () {
@@ -42,5 +43,5 @@ it('will redirect if the slug is incorrect', function (string $incorrectSlug) {
         ->assertRedirect($post->showRoute(['page' => 2]));
 })->with([
     'foo-bar',
-    'hello'
+    'hello',
 ]);

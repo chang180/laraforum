@@ -4,12 +4,13 @@ use App\Models\Comment;
 use App\Models\Like;
 use App\Models\Post;
 use App\Models\User;
-use function Pest\Laravel\actingAs;
-use function Pest\Laravel\post;
 use Illuminate\Database\Eloquent\Model;
 
+use function Pest\Laravel\actingAs;
+use function Pest\Laravel\post;
+
 it('requires authentication', function () {
-    post(route('likes.store',[
+    post(route('likes.store', [
         'type' => 'post',
         'id' => 1,
     ]))->assertRedirect(route('login'));
@@ -34,8 +35,8 @@ it('allows liking a likeable', function (Model $likeable) {
     ]);
     expect($likeable->refresh()->likes_count)->toBe(1);
 })->with([
-    fn() => Post::factory()->create(),
-    fn() => Comment::factory()->create(),
+    fn () => Post::factory()->create(),
+    fn () => Comment::factory()->create(),
 ]);
 
 it('prevents liking something you already liked', function () {
@@ -50,7 +51,6 @@ it('prevents liking something you already liked', function () {
         ]))
         ->assertForbidden();
 });
-
 
 it('only allows liking supported models', function () {
     /** @var User $user */

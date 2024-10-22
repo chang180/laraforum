@@ -13,13 +13,11 @@ class LikePolicy
     /**
      * Determine whether the user can create a like.
      *
-     * @param User $user
-     * @param Like $likeable
-     * @return bool
+     * @param  Like  $likeable
      */
     public function create(User $user, Model $likeable): bool
     {
-        if (!in_array($likeable::class, [Post::class, Comment::class])) {
+        if (! in_array($likeable::class, [Post::class, Comment::class])) {
             return false;
         }
 
@@ -31,7 +29,7 @@ class LikePolicy
      */
     public function delete(User $user, Model $likeable): bool
     {
-        if (!in_array($likeable::class, [Post::class, Comment::class])) {
+        if (! in_array($likeable::class, [Post::class, Comment::class])) {
             return false;
         }
 

@@ -4,9 +4,10 @@ use App\Models\Comment;
 use App\Models\Like;
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
+
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\delete;
-use Illuminate\Database\Eloquent\Model;
 
 it('requires authentication', function () {
     delete(route('likes.destroy', [
@@ -32,8 +33,8 @@ it('allows unliking a likeable', function (Model $likeable) {
     $this->assertDatabaseEmpty(Like::class);
     expect($likeable->refresh()->likes_count)->toBe(0);
 })->with([
-    fn() => Post::factory()->create(['likes_count' => 1]),
-    fn() => Comment::factory()->create(['likes_count' => 1]),
+    fn () => Post::factory()->create(['likes_count' => 1]),
+    fn () => Comment::factory()->create(['likes_count' => 1]),
 ]);
 
 it('prevents unliking something you havent liked', function () {

@@ -7,7 +7,6 @@ use App\Models\User;
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\post;
 
-
 beforeEach(function () {
     $this->validData = fn () => [
         'title' => 'My first post',
