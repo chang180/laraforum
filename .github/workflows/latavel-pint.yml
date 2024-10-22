@@ -32,5 +32,5 @@ jobs:
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'github_action@laraforum.test'
           git add .
-          git commit -m "Run Laravel Pint" || exit
+          git commit -m "Run Laravel Pint" || exit 0
           git push
