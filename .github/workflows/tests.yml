@@ -33,6 +33,8 @@ jobs:
         run: |
           cp .env.example .env
           php artisan key:generate
+          php artisan migrate --env=testing
+          php artisan db:seed --env=testing
 
       - name: Run Tests
         run: php artisan test --compact
