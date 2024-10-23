@@ -49,4 +49,18 @@ class Post extends Model
     {
         return $this->morphMany(Like::class, 'likeable');
     }
+
+    /**
+     * 縮小 Scout 送出的資料量
+     */
+    public function toSearchableArray(): array
+    {
+        // 只選擇需要被索引的欄位，避免過大資料量
+        $array = $this->only(['id', 'title', 'user_id', 'topic_id']);
+
+        // 添加額外的字段
+        $array['excerpt'] = Str::limit($this->body, 100);  // 只存儲 body 的前 100 個字作為摘要
+
+        return $array;
+    }
 }
