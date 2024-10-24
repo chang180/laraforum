@@ -1,5 +1,4 @@
 name: Laravel Pint
-
 on:
   push:
     branches:
@@ -20,6 +19,14 @@ jobs:
         with:
           php-version: '8.3'
           tools: composer:v2
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
 
       - name: Install Laravel Pint
         run: composer global require laravel/pint
