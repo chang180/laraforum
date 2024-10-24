@@ -12,6 +12,7 @@ class CommentController extends Controller
 {
     /**
      * Store a newly created resource in storage.
+     * new comment
      */
     public function store(Request $request, Post $post)
     {
