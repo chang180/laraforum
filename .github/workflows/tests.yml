@@ -55,7 +55,7 @@ jobs:
         uses: actions/cache@v4.1.2
         with:
           key: composer-cache-{{ hashFiles('**/composer.lock') }}
-          path: ${{ steps.compser-cache-dir.outputs.dir }}
+          path: ${{ steps.composer-cache-dir.outputs.dir }}
           restore-keys: composer-cache-
 
       - name: Install dependencies
