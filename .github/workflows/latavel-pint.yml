@@ -1,5 +1,4 @@
 name: Laravel Pint
-
 on:
   push:
     branches:
@@ -20,6 +19,20 @@ jobs:
         with:
           php-version: '8.3'
           tools: composer:v2
+
+      - name: Setup cache environment
+        id: steps.pintcache.outputs.key
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: '8.3'
+          key: 'cache_key_v1'
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.steps.pintcache.outputs.key.outputs.dir }}
+          key: ${{ steps.steps.pintcache.outputs.key.outputs.key }}
+          restore-keys: ${{ steps.steps.pintcache.outputs.key.outputs.key }}
 
       - name: Install Laravel Pint
         run: composer global require laravel/pint

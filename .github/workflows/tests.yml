@@ -1,0 +1,70 @@
+name: Tests
+
+on:
+  pull_request
+
+
+jobs:
+  laraforum-tests:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: laraforum
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+        ports:
+          - 3306:3306
+
+    env:
+      PHP_VERSION: '8.3'
+      CACHE_KEY: extension-cache-v1
+      PHP_EXTENSIONS: mbstring, pdo, pdo_mysql, curl, dom, pcntl
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup cache environment
+        id: extcache
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: ${{ env.PHP_EXTENSIONS }}
+          key: ${{ env.CACHE_KEY }}
+
+      - name: Cache extensions
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.extcache.outputs.dir }}
+          key: ${{ steps.extcache.outputs.key }}
+          restore-keys: ${{ steps.extcache.outputs.key }}
+
+      - name: Setup PHP and Composer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          tools: composer:v2
+          extensions: ${{ env.PHP_EXTENSIONS }}
+
+      - name: Get Composer Cache Dir
+        id: composer-cache-dir
+        run: echo dir=$(composer config cache-files-dir) >> GITHUB_OUTPUT
+
+      - name: Cache dependencies
+        uses: actions/cache@v4.1.2
+        with:
+          key: composer-cache-{{ hashFiles('**/composer.lock') }}
+          path: ${{ steps.compser-cache-dir.outputs.dir }}
+          restore-keys: composer-cache-
+
+      - name: Install dependencies
+        run: composer install -q --no-interaction --no-progress
+
+      - name: Prepare environment
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Run Tests
+        run: php artisan test --compact
