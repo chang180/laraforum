@@ -21,7 +21,7 @@ jobs:
           tools: composer:v2
 
       - name: Setup cache environment
-        id: steps.pintcache.outputs.key
+        id: pintcache
         uses: shivammathur/cache-extensions@v1
         with:
           php-version: '8.3'
@@ -30,9 +30,9 @@ jobs:
       - name: Cache Composer dependencies
         uses: actions/cache@v4
         with:
-          path: ${{ steps.steps.pintcache.outputs.key.outputs.dir }}
-          key: ${{ steps.steps.pintcache.outputs.key.outputs.key }}
-          restore-keys: ${{ steps.steps.pintcache.outputs.key.outputs.key }}
+          path: ${{ steps.pintcache.outputs.dir }}
+          key: ${{ steps.pintcache.outputs.key }}
+          restore-keys: ${{ steps.pintcache.outputs.key }}
 
       - name: Install Laravel Pint
         run: composer global require laravel/pint
