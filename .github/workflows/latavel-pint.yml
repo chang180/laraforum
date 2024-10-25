@@ -20,25 +20,25 @@ jobs:
           php-version: '8.3'
           tools: composer:v2
 
-      - name: Setup cache environment
-        id: pintcache
+      - name: Cache PHP Extensions
         uses: shivammathur/cache-extensions@v1
         with:
           php-version: '8.3'
-          key: 'cache_key_v1'
+          extensions: mbstring, intl, pdo_mysql # 確保指定必要的 PHP 擴展
+          key: 'php-extensions-cache-key'
 
       - name: Cache Composer dependencies
         uses: actions/cache@v4
         with:
-          path: ${{ steps.pintcache.outputs.dir }}
-          key: ${{ steps.pintcache.outputs.key }}
-          restore-keys: ${{ steps.pintcache.outputs.key }}
+          path: ~/.composer/cache
+          key: composer-cache-${{ hashFiles('**/composer.lock') }}
+          restore-keys: composer-cache-
 
       - name: Install Laravel Pint
         run: composer global require laravel/pint
 
       - name: Run Laravel Pint
-        run: pint
+        run: ~/.composer/vendor/bin/pint
 
       - name: Push changes
         run: |
